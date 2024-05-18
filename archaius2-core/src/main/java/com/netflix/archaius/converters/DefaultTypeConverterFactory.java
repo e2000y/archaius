@@ -30,6 +30,18 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
+//  for new types
+import java.io.File;
+import java.net.URI;
+import java.net.URL;
+import java.net.InetAddress;
+import java.nio.charset.Charset;
+import java.util.regex.Pattern;
+import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.text.MessageFormat;
+import java.text.ChoiceFormat;
+import java.text.DecimalFormat;
 
 public final class DefaultTypeConverterFactory implements TypeConverter.Factory {
     public static final DefaultTypeConverterFactory INSTANCE = new DefaultTypeConverterFactory();
@@ -85,6 +97,37 @@ public final class DefaultTypeConverterFactory implements TypeConverter.Factory 
             try {
                 return BitSet.valueOf(Hex.decodeHex(v));
             } catch (DecoderException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        // add more types
+        converters.put(File.class, s->new File(s));
+        converters.put(Charset.class, s->Charset.forName(s));
+        converters.put(Pattern.class, s->Pattern.compile(s));
+        converters.put(UUID.class, s->UUID.fromString(s));
+        converters.put(SimpleDateFormat.class, s->new SimpleDateFormat(s));
+        converters.put(MessageFormat.class, s->new MessageFormat(s));
+        converters.put(ChoiceFormat.class, s->new ChoiceFormat(s));
+        converters.put(DecimalFormat.class, s->new DecimalFormat(s));
+        converters.put(URI.class, s-> {
+            try {
+                return new URI(s);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        converters.put(URL.class, s-> {
+            try {
+                return new URL(s);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        converters.put(InetAddress.class, s-> {
+            try {
+                return InetAddress.getByName(s);
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });

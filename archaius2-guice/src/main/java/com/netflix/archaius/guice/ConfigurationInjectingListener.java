@@ -1,5 +1,8 @@
 package com.netflix.archaius.guice;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.ProvisionException;
@@ -24,7 +27,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class ConfigurationInjectingListener implements ProvisionListener {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigurationInjectingListener.class);
@@ -103,6 +106,16 @@ public class ConfigurationInjectingListener implements ProvisionListener {
                     @Override
                     public <S> S getInstance(String name, Class<S> type) {
                         return injector.getInstance(Key.get(type, Names.named(name)));
+                    }
+
+                    @Override
+                    public boolean doInject(Field  field) {
+                        return ((field.getAnnotation(jakarta.inject.Inject.class) != null) || (field.getAnnotation(com.google.inject.Inject.class) != null));
+                    }
+
+                    @Override
+                    public boolean doInject(Method  method) {
+                        return ((method.getAnnotation(jakarta.inject.Inject.class) != null) || (method.getAnnotation(com.google.inject.Inject.class) != null));
                     }
                 });
             }

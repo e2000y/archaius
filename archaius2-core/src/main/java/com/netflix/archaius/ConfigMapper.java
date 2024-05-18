@@ -35,6 +35,16 @@ public class ConfigMapper {
         public <T> T getInstance(String name, Class<T> type) {
             return null;
         }
+
+        @Override
+        public boolean doInject(Field  field) {
+            return false;
+        }
+
+        @Override
+        public boolean doInject(Method  method) {
+            return false;
+        }
     };
     
     /**
@@ -107,6 +117,10 @@ public class ConfigMapper {
                     || Modifier.isStatic(field.getModifiers())) {
                     continue;
                 }
+
+                if (ioc.doInject(field)) {
+                    continue;
+                }
                 
                 String name = field.getName();
                 Class<?> type = field.getType();
@@ -154,6 +168,10 @@ public class ConfigMapper {
                     name = name.substring(4,1).toLowerCase() + name.substring(5);
                 }
                 else {
+                    continue;
+                }
+
+                if (ioc.doInject(method)) {
                     continue;
                 }
     

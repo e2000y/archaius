@@ -18,13 +18,7 @@ apply plugin: 'java-library'
 
 dependencies {
     api  project(':archaius2-core')
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.12.7'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7'
-    implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
-    implementation 'org.apache.commons:commons-lang3:3.3.2'
-    implementation 'org.slf4j:slf4j-api:1.7.36'
-
-    testImplementation project(':archaius2-guice')
+    api  'org.apache.commons:commons-configuration2:2.7'
 }
 
 eclipse {

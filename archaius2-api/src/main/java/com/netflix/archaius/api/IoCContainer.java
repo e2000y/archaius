@@ -15,6 +15,9 @@
  */
 package com.netflix.archaius.api;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 /**
  * Interface used by ConfigBinder to integrate with a DI framework that 
  * allows for named injection.  This integration enables binding a string
@@ -30,4 +33,16 @@ public interface IoCContainer {
      * @return Return the instance for type T bound to 'name'
      */
     public <T> T getInstance(String name, Class<T> type);
+
+    /**
+     * @param field
+     * @return Return true if the DI framework handles the field injection
+     */
+    public boolean doInject(Field  field);
+
+    /**
+     * @param method
+     * @return Return true if the DI framework handles the method injection
+     */
+    public boolean doInject(Method  method);
 }
